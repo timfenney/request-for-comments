@@ -1,68 +1,50 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# A Comment Card / Widget
 
-## Available Scripts
+This repo contains a simple Comment widget to display a Comment to the User, and allow some simple interaction.
 
-In the project directory, you can run:
+### Artistic Liberty
 
-### `yarn start`
+A few liberties were taken with the design. For example, the upvote and downvote icons are colored blue when the User has performed the respective actions (a nod to Youtube). This may not be entirely clear from looking at the component on the page, since any api requests, optimistic updates, etc., are out of scope for this component which pretty much just renders the data it receives.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### React Storybook
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+`yarn` will install the dependencies.
 
-### `yarn test`
+`yarn storybook` will run the storybook for the project. Pick `CommentCard` from the options at the left to view stories for this component.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+There are a few different stories to click on, to see the component in different states. Each story should use `actions` for the click handlers; if you click to upvote, downvote, or reply on a comment, you should see the relevant actions fired in the `Actions` tab under the rendered comment.
 
-### `yarn build`
+If you select the story titled `With Dynamic Variables`, then click on the `Knobs` tab under the rendered component, you can edit the props passed to the component.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Time
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+This might seem a little weird, but I thought time in a React app could
+be handled via some kind of policy. For reasons of both performance, as well as I/O isolation, it is desirable to not have individual comments firing their own callbacks using `setInterval` or the like (especially if there might be hundreds of them).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+For this reason I made both the comment creation time, and the current time, props to be passed to the component.
 
-### `yarn eject`
+### Styles
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+It's pretty clear the styles could use a refactor. Honestly this was my first project using Styled Components, so having heard good things I thought I'd give it a go.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+I ran into an issue where for some reason, I wasn't wrapping the components correctly, and so the styles weren't correctly applied. I ended up having to work around such cases, e.g. in `Vote.js`. I'm pretty sure if I worked through it, I could make the code a fair bit more clean.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Accessibility
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+What's that? Seriously, this component needs some love in this direction, specifically wrt to the clickable elements. They should probably get a role, maybe a tab index, and keyboard support.
 
-## Learn More
+### Testing
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+There are a few basic tests. There are Unit Tests for the `formatEllapsedTime` function. I'd really like to have gotten more tests going, but I ran out of time.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+And since I already did the other assignment option, I figured I could get away with it ;-)
 
-### Code Splitting
+On the bright side, there aren't too many conditionals in this component. I have e.g. a ternary for whether to show the Up or Down icon; since the data to configure these choices are static, and both types are rendered in every comment, I have high confidence that any defect in this functionality should be noticed quickly, even without a test.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+On the other hand, for components performing state transitions, talking to apis, etc., I would have no such confidence without attempting to cover all cases with relevant tests.
 
-### Analyzing the Bundle Size
+### Jankiness
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+I bootstrapped this repo with `create-react-app`, and intended to use it, but then I realized I only really needed react storybook and a test runner.
 
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+It deserves a cleanup; however I am out of time (see above).
